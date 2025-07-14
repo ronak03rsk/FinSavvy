@@ -24,7 +24,7 @@ const Dashboard = () => {
   // Fetch expenses on load
   const fetchExpenses = async () => {
     try {
-      const res = await API.get("/expenses");
+      const res = await API.get("/api/expenses");
       setExpenses(res.data);
     } catch (err) {
       console.error("Error fetching expenses", err.message);
@@ -43,7 +43,7 @@ const Dashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/expenses", {
+      const res = await API.post("/api/expenses", {
         ...form,
         amount: parseFloat(form.amount),
       });
@@ -76,13 +76,13 @@ const Dashboard = () => {
   const [monthlySummary, setMonthlySummary] = useState({});
 
   useEffect(() => {
-    API.get("/summary/categories").then(res => setCategorySummary(res.data));
+    API.get("/api/summary/categories").then(res => setCategorySummary(res.data));
   }, []);
 
   const handleFetchMonthly = async () => {
     const income = prompt("Enter your monthly income:");
     if (!income) return;
-    const res = await API.get(`/summary/monthly?income=${income}`);
+    const res = await API.get(`/api/summary/monthly?income=${income}`);
     setMonthlySummary(res.data);
   };
 

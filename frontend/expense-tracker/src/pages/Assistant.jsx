@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useGamification } from "../context/GamificationContext";
 
 const Assistant = () => {
@@ -33,11 +34,7 @@ const Assistant = () => {
       
       console.log("Making request to /api/ai/production with token:", token?.substring(0, 20) + "...");
       
-      const res = await axios.post(
-        "http://localhost:5000/api/ai/production", // Changed to production endpoint
-        { message: userInput },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axiosInstance.post("/api/ai/production", { message: userInput });
 
       console.log("AI Response:", res.data);
 
@@ -58,10 +55,7 @@ const Assistant = () => {
       // Try debug endpoint as fallback (no auth required)
       try {
         console.log("Trying debug endpoint as fallback...");
-        const debugRes = await axios.post(
-          "http://localhost:5000/api/ai/debug",
-          { message: userInput }
-        );
+        const debugRes = await axiosInstance.post("/api/ai/debug", { message: userInput });
         
         const botMessage = { 
           role: "assistant", 

@@ -29,7 +29,7 @@ export const GamificationProvider = ({ children }) => {
   const fetchUserStats = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get('/gamification/stats');
+      const response = await axiosInstance.get('/api/gamification/stats');
       if (response.data.success) {
         setUserStats(response.data.data);
       }
@@ -113,7 +113,7 @@ export const GamificationProvider = ({ children }) => {
   // Award points (this will be handled by backend now)
   const awardPoints = async (points, action) => {
     try {
-      const response = await axiosInstance.post('/gamification/points', {
+      const response = await axiosInstance.post('/api/gamification/points', {
         points,
         action
       });
@@ -159,7 +159,7 @@ export const GamificationProvider = ({ children }) => {
     // Award new badges
     for (const badge of newBadges) {
       try {
-        const response = await axiosInstance.post('/gamification/badge', {
+        const response = await axiosInstance.post('/api/gamification/badge', {
           badgeId: badge.id,
           points: badge.points
         });

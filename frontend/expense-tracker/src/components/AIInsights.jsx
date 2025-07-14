@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useGamification } from "../context/GamificationContext";
 
 const AIInsights = () => {
@@ -26,10 +27,7 @@ const AIInsights = () => {
         return;
       }
 
-      const response = await axios.get(
-        `http://localhost:5000/api/ai/insights?income=${income}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await axiosInstance.get(`/api/ai/insights?income=${income}`);
 
       setInsights(response.data);
       
