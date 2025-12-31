@@ -42,8 +42,14 @@ export const GamificationProvider = ({ children }) => {
     }
   };
 
-  // Load user stats on component mount
+  // Load user stats on component mount only if authenticated
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      // Not authenticated; skip fetching
+      setLoading(false);
+      return;
+    }
     fetchUserStats();
   }, []);
 

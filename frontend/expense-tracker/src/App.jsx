@@ -56,8 +56,9 @@ function App() {
             <div className="flex-1 overflow-y-auto">
               <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                {/* If already authenticated, redirect away from auth pages */}
+                <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
+                <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} />
                 <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
                 <Route path="/assistant" element={isAuthenticated ? <Assistant /> : <Navigate to="/login" />} />
                 <Route path="/insights" element={isAuthenticated ? <AIInsights /> : <Navigate to="/login" />} />

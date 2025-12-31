@@ -65,8 +65,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/api/auth/login", form);
-      localStorage.setItem("token", res.data.token);
+  const res = await API.post("/api/auth/login", form);
+  sessionStorage.setItem("token", res.data.token);
       login();
       navigate("/dashboard");
     } catch (err) {
