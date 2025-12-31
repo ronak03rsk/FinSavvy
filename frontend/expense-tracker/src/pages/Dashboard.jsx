@@ -64,7 +64,7 @@ const Dashboard = () => {
   // Delete expense
   const handleDelete = async (id) => {
     try {
-      await API.delete(`/expenses/${id}`);
+      await API.delete(`/api/expenses/${id}`);
       setExpenses(expenses.filter((e) => e._id !== id));
     } catch (err) {
       alert("Failed to delete expense");
