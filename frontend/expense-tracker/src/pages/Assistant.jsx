@@ -25,8 +25,8 @@ const Assistant = () => {
     setLoading(true);
 
     try {
-      // Fix: Get token directly from localStorage, not from user object
-      const token = localStorage.getItem("token");
+      // Use the same storage as AuthContext/axiosInstance
+      const token = sessionStorage.getItem("token");
       
       if (!token) {
         throw new Error("No authentication token found");
