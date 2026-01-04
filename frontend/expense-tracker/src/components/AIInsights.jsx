@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-hot-toast";
 import { useGamification } from "../context/GamificationContext";
 
 const AIInsights = () => {
@@ -33,6 +34,7 @@ const AIInsights = () => {
       
       // Award gamification points for using AI insights
       await useAI('insights');
+      toast.success("AI insights: +15 points");
     } catch (err) {
       console.error("AI Insights error:", err);
       setError(err.response?.data?.msg || "Failed to fetch insights");

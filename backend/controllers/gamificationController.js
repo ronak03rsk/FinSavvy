@@ -8,6 +8,21 @@ export const getGamificationStats = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Initialize gamification if missing
+    if (!user.gamification) {
+      user.gamification = {
+        points: 0,
+        level: 1,
+        totalExpenses: 0,
+        expensesThisMonth: 0,
+        streak: 0,
+        lastExpenseDate: null,
+        badges: [],
+        achievements: []
+      };
+      await user.save();
+    }
+
     res.json({
       success: true,
       data: user.gamification
@@ -32,6 +47,18 @@ export const updateGamificationStats = async (req, res) => {
     }
 
     // Update gamification stats
+    if (!user.gamification) {
+      user.gamification = {
+        points: 0,
+        level: 1,
+        totalExpenses: 0,
+        expensesThisMonth: 0,
+        streak: 0,
+        lastExpenseDate: null,
+        badges: [],
+        achievements: []
+      };
+    }
     user.gamification = { ...user.gamification, ...stats };
     await user.save();
 
@@ -60,6 +87,18 @@ export const awardPoints = async (req, res) => {
     }
 
     // Award points
+    if (!user.gamification) {
+      user.gamification = {
+        points: 0,
+        level: 1,
+        totalExpenses: 0,
+        expensesThisMonth: 0,
+        streak: 0,
+        lastExpenseDate: null,
+        badges: [],
+        achievements: []
+      };
+    }
     user.gamification.points += points;
     
     // Recalculate level
@@ -108,6 +147,20 @@ export const addExpenseStats = async (req, res) => {
       } else if (daysDiff === 0) {
         newStreak = user.gamification.streak; // Same day
       }
+    }
+
+    // Initialize gamification if missing
+    if (!user.gamification) {
+      user.gamification = {
+        points: 0,
+        level: 1,
+        totalExpenses: 0,
+        expensesThisMonth: 0,
+        streak: 0,
+        lastExpenseDate: null,
+        badges: [],
+        achievements: []
+      };
     }
 
     // Update stats

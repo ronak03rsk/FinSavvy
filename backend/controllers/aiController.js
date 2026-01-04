@@ -422,6 +422,33 @@ export const productionAssistant = async (req, res) => {
     response = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
   }
 
+  // Award gamification points for AI chat usage (5 points)
+  try {
+    if (req.user?.id) {
+      const user = await User.findById(req.user.id);
+      if (user) {
+        if (!user.gamification) {
+          user.gamification = {
+            points: 0,
+            level: 1,
+            totalExpenses: 0,
+            expensesThisMonth: 0,
+            streak: 0,
+            lastExpenseDate: null,
+            badges: [],
+            achievements: []
+          };
+        }
+        user.gamification.points += 5;
+        user.gamification.level = Math.floor(user.gamification.points / 100) + 1;
+        await user.save();
+      }
+    }
+  } catch (gamificationError) {
+    console.error("Gamification update error:", gamificationError);
+    // Don't fail the main request if gamification update fails
+  }
+
   res.status(200).json({ 
     reply: response,
     category: category,
@@ -596,6 +623,18 @@ export const getAIInsights = async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
       if (user) {
+          if (!user.gamification) {
+            user.gamification = {
+              points: 0,
+              level: 1,
+              totalExpenses: 0,
+              expensesThisMonth: 0,
+              streak: 0,
+              lastExpenseDate: null,
+              badges: [],
+              achievements: []
+            };
+          }
         user.gamification.points += 15; // Award 15 points for AI insights
         user.gamification.level = Math.floor(user.gamification.points / 100) + 1;
         await user.save();

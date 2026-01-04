@@ -2,9 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
 import { useGamification } from "../context/GamificationContext";
+import { toast } from "react-hot-toast";
 
 const Assistant = () => {
-  const { useAI } = useGamification();
+  const { useAI, awardPoints } = useGamification();
   const [messages, setMessages] = useState([
     { 
       role: "assistant", 
@@ -47,8 +48,15 @@ const Assistant = () => {
       };
       setMessages((prev) => [...prev, botMessage]);
       
-      // Award gamification points for using AI
-      await useAI('chat');
+      // Award gamification points for using AI (production path)
+      try {
+        await awardPoints(5, 'ai_chat');
+        await useAI('chat');
+        toast.success("AI chat: +5 points");
+      } catch (awardErr) {
+        console.error('Failed to award AI chat points:', awardErr);
+        toast.error("Failed to add AI chat points");
+      }
     } catch (err) {
       console.error("AI Assistant error:", err.response?.data || err.message);
       
@@ -65,6 +73,17 @@ const Assistant = () => {
           suggestions: debugRes.data.suggestions || []
         };
         setMessages((prev) => [...prev, botMessage]);
+        toast.success("AI chat: +5 points");
+        // Award points manually since debug route is unauthenticated
+        try {
+          await awardPoints(5, 'ai_chat');
+          await useAI('chat');
+          toast.success("AI chat: +5 points");
+        } catch (awardErr) {
+          console.error('Failed to award AI chat points:', awardErr);
+          toast.error("Failed to add AI chat points");
+        }
+
       } catch (debugErr) {
         console.error("Debug endpoint also failed:", debugErr);
         setMessages((prev) => [

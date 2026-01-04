@@ -9,6 +9,7 @@ import AIInsights from "./components/AIInsights";
 import Leaderboard from "./pages/Leaderboard";
 import { GamificationProvider } from "./context/GamificationContext";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -18,6 +19,7 @@ function App() {
     <GamificationProvider>
       <Router>
         <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
           {/* Mobile overlay */}
           {isAuthenticated && sidebarOpen && (
             <div 
